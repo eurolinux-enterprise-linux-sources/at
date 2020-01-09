@@ -6,7 +6,7 @@
 Summary: Job spooling tools
 Name: at
 Version: 3.1.10
-Release: 43%{?dist}.1
+Release: 44%{?dist}.2
 License: GPLv2+
 Group: System Environment/Daemons
 URL: http://ftp.debian.org/debian/pool/main/a/at
@@ -39,6 +39,7 @@ Patch19: at-3.1.10-man_hyphen.patch
 Patch20: at-3.1.10-different_shell.patch
 Patch21: at-3.1.10-nowrap.patch
 Patch22: at-3.1.10-parsetime.patch
+Patch23: at-3.1.10-filter-environment.patch
 
 BuildRequires: fileutils chkconfig /etc/init.d
 BuildRequires: flex bison autoconf
@@ -89,6 +90,7 @@ cp %{SOURCE1} .
 %patch20 -p1 -b .fixshell
 %patch21 -p1 -b .nowrap
 %patch22 -p1 -b .parsetime
+%patch23 -p1 -b .filter-environment
 
 %build
 # patch10 touches configure.in
@@ -194,9 +196,12 @@ fi
 %attr(0755,root,root)		%{_libdir}/pm-utils/sleep.d/56atd
 
 %changelog
-* Thu Jan 19 2012 Marcela Mašláňová <mmaslano@redhat.com> - 3.1.10-43.el2_1
+* Mon Oct  6 2014 Tomáš Mráz <tmraz@redhat.com> - 3.1.10-44.2
+- filter environment variables not acceptable in bash input (#1147043)
+
+* Thu Jan 19 2012 Marcela Mašláňová <mmaslano@redhat.com> - 3.1.10-44
 - apply the fix from at-3.1.12
-- Resolves: rhbz#783190
+- Resolves: rhbz#771095
 
 * Mon Nov  8 2010 Marcela Mašláňová <mmaslano@redhat.com> - 3.1.10-43
 - 630019 set correct (f)pie build flags
