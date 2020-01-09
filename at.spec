@@ -42,7 +42,7 @@ Patch22: at-3.1.10-parsetime.patch
 Patch23: at-3.1.10-filter-environment.patch
 
 BuildRequires: fileutils chkconfig /etc/init.d
-BuildRequires: flex bison autoconf
+BuildRequires: flex flex-devel bison autoconf
 BuildRequires: libselinux-devel >= 1.27.9
 
 %if %{WITH_PAM}
