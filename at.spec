@@ -6,7 +6,7 @@
 Summary: Job spooling tools
 Name: at
 Version: 3.1.10
-Release: 44%{?dist}.2
+Release: 48%{?dist}
 License: GPLv2+
 Group: System Environment/Daemons
 URL: http://ftp.debian.org/debian/pool/main/a/at
@@ -40,10 +40,16 @@ Patch20: at-3.1.10-different_shell.patch
 Patch21: at-3.1.10-nowrap.patch
 Patch22: at-3.1.10-parsetime.patch
 Patch23: at-3.1.10-filter-environment.patch
+Patch24: at-3.1.10-no-perr.patch
+Patch25: at-3.1.10-help.patch
+Patch26: at-3.1.10-fclose-error.patch
 
-BuildRequires: fileutils chkconfig /etc/init.d
 BuildRequires: flex flex-devel bison autoconf
 BuildRequires: libselinux-devel >= 1.27.9
+
+Requires(post): chkconfig coreutils initscripts
+Requires(preun): chkconfig coreutils initscripts
+Requires(postun): initscripts
 
 %if %{WITH_PAM}
 BuildRequires: pam-devel
@@ -91,6 +97,9 @@ cp %{SOURCE1} .
 %patch21 -p1 -b .nowrap
 %patch22 -p1 -b .parsetime
 %patch23 -p1 -b .filter-environment
+%patch24 -p1 -b .no-perr
+%patch25 -p1 -b .help
+%patch26 -p1 -b .fclose
 
 %build
 # patch10 touches configure.in
@@ -196,7 +205,16 @@ fi
 %attr(0755,root,root)		%{_libdir}/pm-utils/sleep.d/56atd
 
 %changelog
-* Mon Oct  6 2014 Tomáš Mráz <tmraz@redhat.com> - 3.1.10-44.2
+* Mon Feb 16 2015 Tomáš Mráz <tmraz@redhat.com> - 3.1.10-48
+- mention -d and -M in the man page (#1192037)
+
+* Thu Dec 11 2014 Tomáš Mráz <tmraz@redhat.com> - 3.1.10-47
+- do not use perr() in running atd (#994201)
+- correct Requires/BuildRequires (#712079)
+- mention all options in the usage() (#784814)
+- do not leave zero-byte sized files when filesystem is full (#1166882)
+
+* Thu Oct  2 2014 Tomáš Mráz <tmraz@redhat.com> - 3.1.10-45
 - filter environment variables not acceptable in bash input (#1147043)
 
 * Thu Jan 19 2012 Marcela Mašláňová <mmaslano@redhat.com> - 3.1.10-44
