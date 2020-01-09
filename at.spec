@@ -6,7 +6,7 @@
 Summary: Job spooling tools
 Name: at
 Version: 3.1.10
-Release: 48%{?dist}
+Release: 49%{?dist}
 License: GPLv2+
 Group: System Environment/Daemons
 URL: http://ftp.debian.org/debian/pool/main/a/at
@@ -43,6 +43,8 @@ Patch23: at-3.1.10-filter-environment.patch
 Patch24: at-3.1.10-no-perr.patch
 Patch25: at-3.1.10-help.patch
 Patch26: at-3.1.10-fclose-error.patch
+Patch27: at-3.1.13-clear-nonjobs.patch
+Patch28: at-3.1.13-utc-dst.patch
 
 BuildRequires: flex flex-devel bison autoconf
 BuildRequires: libselinux-devel >= 1.27.9
@@ -100,6 +102,8 @@ cp %{SOURCE1} .
 %patch24 -p1 -b .no-perr
 %patch25 -p1 -b .help
 %patch26 -p1 -b .fclose
+%patch27 -p1 -b .clear-nonjobs
+%patch28 -p1 -b .dst
 
 %build
 # patch10 touches configure.in
@@ -205,6 +209,11 @@ fi
 %attr(0755,root,root)		%{_libdir}/pm-utils/sleep.d/56atd
 
 %changelog
+* Tue Oct 18 2016 Tomáš Mráz <tmraz@redhat.com> - 3.1.10-49
+- correct the DST correction when using UTC time specification (#1320322)
+- clear non-job files from at dir and test for write error on fclose
+  to fix bogus syslog messages (#1226958)
+
 * Mon Feb 16 2015 Tomáš Mráz <tmraz@redhat.com> - 3.1.10-48
 - mention -d and -M in the man page (#1192037)
 
